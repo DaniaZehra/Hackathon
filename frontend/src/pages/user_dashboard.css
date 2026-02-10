@@ -323,7 +323,7 @@
 
 .pill-label {
   font-size: 0.78rem;
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.08em;
   color: rgba(184, 214, 208, 0.9);
 }
@@ -955,8 +955,70 @@
   color: #4a5a6e;
 }
 
-.transactions-table-wrapper {
+/* Transactions filters */
+.transactions-filters {
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f5f7fb;
+  border-radius: 12px;
+  border: 1px solid #e0e5f0;
+}
+
+.transactions-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.transactions-filter-row + .transactions-filter-row {
   margin-top: 0.75rem;
+}
+
+.transactions-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 120px;
+}
+
+.transactions-filter-group.transactions-filter-amounts {
+  min-width: 90px;
+}
+
+.transactions-filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #4a5a6e;
+}
+
+.transactions-filter-select,
+.transactions-filter-input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #c6d0dd;
+  font-size: 0.9rem;
+  background: #fff;
+  color: #111;
+}
+
+.transactions-filter-select:focus,
+.transactions-filter-input:focus {
+  outline: none;
+  border-color: #1a5c4a;
+  box-shadow: 0 0 0 2px rgba(26, 92, 74, 0.12);
+}
+
+.transactions-filter-result {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: #6b778a;
+}
+
+.transactions-table-wrapper {
+  margin-top: 0;
   overflow-x: auto;
 }
 

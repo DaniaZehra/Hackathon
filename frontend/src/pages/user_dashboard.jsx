@@ -151,7 +151,7 @@ function UserDashboard({
                     </span>
                   </div>
                   <div className="balance-pill">
-                    <span className="pill-label">Daily Average Spend</span>
+                    <span className="pill-label">Average Spend</span>
                     <span className="pill-value">
                       {dailyAvgSpend.toLocaleString('en-PK', {
                         minimumFractionDigits: 2,
