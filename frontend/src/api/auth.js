@@ -44,3 +44,41 @@ export async function updateUserProfile(username, updates) {
   return handleResponse(response)
 }
 
+export async function sendMoney(username, transfer) {
+  const response = await fetch(
+    `${API_BASE_URL}/user/${encodeURIComponent(username)}/transfer`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(transfer),
+    },
+  )
+
+  return handleResponse(response)
+}
+
+export async function addFunds(username, payload) {
+  const response = await fetch(
+    `${API_BASE_URL}/user/${encodeURIComponent(username)}/add-funds`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    },
+  )
+
+  return handleResponse(response)
+}
+
+export async function payBill(username, payload) {
+  const response = await fetch(
+    `${API_BASE_URL}/user/${encodeURIComponent(username)}/pay-bill`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    },
+  )
+
+  return handleResponse(response)
+}

@@ -23,6 +23,9 @@ function App() {
     setCurrentUser(user)
     setScreen('user_dashboard')
   }
+  const handleUserUpdate = (user) => {
+    setCurrentUser(user)
+  }
   const showProfile = () => setScreen('edit_profile')
   const showVoiceAssistant = () => setScreen('voice_assistant')
   const showAiAdvisor = () => setScreen('ai_advisor')
@@ -55,6 +58,7 @@ function App() {
         onGoToVoiceAssistant={showVoiceAssistant}
         onGoToAiAdvisor={showAiAdvisor}
         onGoToTransactions={showTransactions}
+        onUserUpdate={handleUserUpdate}
       />
     )
   }

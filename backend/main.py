@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import io
 import os
+from datetime import datetime
 
 import bcrypt
 from pydantic import BaseModel
@@ -53,6 +54,33 @@ class UpdateUserRequest(BaseModel):
     balance: float | None = None
     monthly_spends: float | None = None
     daily_avg_spend: float | None = None
+
+
+class TransferRequest(BaseModel):
+    recipient_name: str
+    account_id: str
+    amount: float
+    purpose: str
+
+
+class AddFundsRequest(BaseModel):
+    amount: float
+    source: str  # 'debit_card' | 'credit_card' | 'bank_transfer'
+    purpose: str | None = None
+    cardholder_name: str | None = None
+    card_number: str | None = None
+    expiry_date: str | None = None
+    cvv: str | None = None
+    bank_name: str | None = None
+    bank_account: str | None = None
+
+
+class PayBillRequest(BaseModel):
+    category: str  # electricity, gas, water, internet, mobile
+    reference_number: str
+    provider: str | None = None
+    amount: float
+    account_source: str  # savings, current
 
 def hash_password(plain_password: str) -> str:
     return bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt()).decode(
@@ -109,6 +137,9 @@ def signup(payload: SignupRequest):
             "lastname": user.lastname,
             "username": user.username,
             "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history,
         },
     }
 
@@ -127,6 +158,9 @@ def login(payload: LoginRequest):
             "lastname": user.lastname,
             "username": user.username,
             "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history,
         },
     }
 
@@ -223,4 +257,173 @@ def update_user(username: str, payload: UpdateUserRequest):
             "monthly_spends": user.monthly_spends,
             "daily_avg_spend": user.daily_avg_spend,
         },
+    }
+
+
+@app.post("/user/{username}/transfer")
+def send_money(username: str, payload: TransferRequest):
+    user = User.objects(username=username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    amount = float(payload.amount)
+    if amount < 100 or amount > 20000:
+        raise HTTPException(status_code=400, detail="Amount must be between 100 and 20000 PKR")
+
+    fee = 50.0  # Flat transfer fee in PKR
+    total = amount + fee
+
+    if user.balance < total:
+        raise HTTPException(status_code=400, detail="Insufficient balance for this transfer")
+
+    # Update balances and spends
+    user.balance = (user.balance or 0) - total
+    user.monthly_spends = (user.monthly_spends or 0) + amount
+    user.daily_avg_spend = user.monthly_spends / 30.0
+
+    transaction = {
+        "recipient_name": payload.recipient_name,
+        "account_id": payload.account_id,
+        "amount": amount,
+        "fee": fee,
+        "total": total,
+        "purpose": payload.purpose,
+        "type": "debit",
+        "created_at": datetime.utcnow().isoformat() + "Z",
+    }
+
+    if user.transaction_history is None:
+        user.transaction_history = []
+    user.transaction_history.append(transaction)
+
+    user.save()
+
+    return {
+        "message": "Transfer successful",
+        "user": {
+            "id": str(user.id),
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "username": user.username,
+            "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history,
+        },
+        "transaction": transaction,
+        "fee": fee,
+        "total": total,
+    }
+
+
+@app.post("/user/{username}/add-funds")
+def add_funds(username: str, payload: AddFundsRequest):
+    user = User.objects(username=username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    amount = float(payload.amount)
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Amount must be greater than 0")
+
+    # Very simple validation by source type
+    if payload.source in ("debit_card", "credit_card"):
+        if not payload.cardholder_name or not payload.card_number or not payload.expiry_date or not payload.cvv:
+            raise HTTPException(status_code=400, detail="Card details are required for card funding")
+    elif payload.source == "bank_transfer":
+        if not payload.bank_name or not payload.bank_account:
+            raise HTTPException(status_code=400, detail="Bank name and account number are required")
+
+    user.balance = (user.balance or 0) + amount
+    # For now we do not touch monthly_spends / daily_avg_spend when adding funds.
+
+    transaction = {
+        "amount": amount,
+        "fee": 0.0,
+        "total": amount,
+        "purpose": payload.purpose or "add_funds",
+        "type": "credit",
+        "source": payload.source,
+        "created_at": datetime.utcnow().isoformat() + "Z",
+    }
+
+    if payload.source in ("debit_card", "credit_card"):
+        transaction["cardholder_name"] = payload.cardholder_name
+        transaction["last4"] = payload.card_number[-4:] if payload.card_number else None
+    elif payload.source == "bank_transfer":
+        transaction["bank_name"] = payload.bank_name
+        transaction["bank_account"] = payload.bank_account
+
+    if user.transaction_history is None:
+        user.transaction_history = []
+    user.transaction_history.append(transaction)
+
+    user.save()
+
+    return {
+        "message": "Funds added successfully",
+        "user": {
+            "id": str(user.id),
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "username": user.username,
+            "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history,
+        },
+        "transaction": transaction,
+    }
+
+
+@app.post("/user/{username}/pay-bill")
+def pay_bill(username: str, payload: PayBillRequest):
+    user = User.objects(username=username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    amount = float(payload.amount)
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Amount must be greater than 0")
+
+    if user.balance is None or user.balance < amount:
+        raise HTTPException(status_code=400, detail="Insufficient balance to pay this bill")
+
+    # Deduct amount, update spending
+    user.balance = (user.balance or 0) - amount
+    user.monthly_spends = (user.monthly_spends or 0) + amount
+    user.daily_avg_spend = user.monthly_spends / 30.0
+
+    transaction = {
+        "amount": amount,
+        "fee": 0.0,
+        "total": amount,
+        "purpose": payload.category,
+        "type": "debit",
+        "source": payload.account_source,
+        "category": payload.category,
+        "reference_number": payload.reference_number,
+        "provider": payload.provider,
+        "created_at": datetime.utcnow().isoformat() + "Z",
+    }
+
+    if user.transaction_history is None:
+        user.transaction_history = []
+    user.transaction_history.append(transaction)
+
+    user.save()
+
+    return {
+        "message": "Bill paid successfully",
+        "user": {
+            "id": str(user.id),
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "username": user.username,
+            "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history,
+        },
+        "transaction": transaction,
     }
