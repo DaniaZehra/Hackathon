@@ -106,5 +106,4 @@ function Signup({ onGoToLogin, onGoHome }) {
     </AuthLayout>
   )
 }
-
 export default Signup
