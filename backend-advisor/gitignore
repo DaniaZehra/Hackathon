@@ -1,0 +1,44 @@
+# .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# MongoDB
+*.ns
+mongod.log
+mongodb_data/
+
+
+
+# Audio files (from TTS)
+audio/
+*.mp3
+*.wav
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*.py
+debug_*.py
+cleanup_*.py
+*.log
+
+# Temporary files
+*.tmp
+*.temp
