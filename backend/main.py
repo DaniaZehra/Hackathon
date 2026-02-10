@@ -1,27 +1,113 @@
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import io
+import os
+
+load_dotenv()
+
 from models.user import User
+from voice.assistent import (
+    transcribe_audio,
+    process_command,
+    text_to_speech
+)
 
-def test_user_model():
-    new_user = User(
-        firstname="Vaniya",
-        lastname="Rehan",
-        username="vaniya123",
-        password="secret123",
-        balance=1000,
-        monthly_spends=200,
-        daily_avg_spend=6.67,
-        transaction_history=[{"date": "2026-02-10", "amount": 50, "desc": "Groceries"}]
-    )
-    new_user.save()
-    print(f"Inserted user with id: {new_user.id}")
+app = FastAPI(title="Voice Banking API")
 
-    users = User.get_all_users()
-    print("All users:")
-    for u in users:
-        print(u.firstname, u.lastname, u.username, u.balance)
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    updated_user = User.update_user(new_user.id, {"balance": 1200})
-    print(f"Updated balance: {updated_user.balance}")
+@app.get("/")
+def home():
+    return {"message": "Voice Banking API Running ✅"}
 
 
-if __name__ == "__main__":
-    test_user_model()
+@app.post("/voice")
+async def voice_command(
+    file: UploadFile = File(...),
+    username: str = "testuser"
+):
+    try:
+        text = transcribe_audio(file)
+        print("User Said:", text)
+
+        reply_text = process_command(text, username)
+        print("AI Reply:", reply_text)
+
+        audio_bytes = text_to_speech(reply_text)
+        return StreamingResponse(
+            io.BytesIO(audio_bytes),
+            media_type="audio/mpeg"
+        )
+
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# Dummy User for testing - Changed to GET so you can use browser
+@app.get("/create-test-user")
+def create_test_user():
+    try:
+        # Check if user already exists
+        existing_user = User.objects(username="testuser").first()
+        if existing_user:
+            return {
+                "message": "Test user already exists",
+                "username": existing_user.username,
+                "balance": existing_user.balance
+            }
+
+        # Create new user
+        user = User(
+            firstname="Ali",
+            lastname="Khan",
+            username="testuser",
+            password="123456",
+            balance=25000,
+            monthly_spends=12000,
+            daily_avg_spend=400,
+            transaction_history=[]
+        )
+        user.save()
+        
+        # Verify it was saved
+        saved_user = User.objects(username="testuser").first()
+        if saved_user:
+            return {
+                "message": "Test user created ✅",
+                "username": saved_user.username,
+                "balance": saved_user.balance
+            }
+        else:
+            return {"error": "User created but not found in DB"}
+            
+    except Exception as e:
+        return {"error": f"Failed to create user: {str(e)}"}
+
+    
+@app.get("/user/{username}")
+def get_user(username: str):
+    try:
+        user = User.objects(username=username).exclude("password").first()
+        if not user:
+            return {"error": "User not found"}
+
+        return {
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "username": user.username,
+            "balance": user.balance,
+            "monthly_spends": user.monthly_spends,
+            "daily_avg_spend": user.daily_avg_spend,
+            "transaction_history": user.transaction_history
+        }
+    except Exception as e:
+        return {"error": f"Failed to get user: {str(e)}"}
