@@ -1,0 +1,116 @@
+
+:root {
+    --primary-dark: #2f3131;
+    --accent-blue: #3b82f6;
+    --bg-light: #f9fafa;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --border-radius: 12px;
+  }
+  
+  .advisor-container {
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--primary-dark);
+  }
+  
+  /* Input Card Section */
+  .portfolio-card {
+    background: white;
+    padding: 24px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+    border: 1px solid #edf2f7;
+  }
+  
+  .holding-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  
+  .holding-row input, .holding-row select {
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  
+  .holding-row input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+  }
+  
+  /* Action Buttons */
+  .btn-add {
+    background: transparent;
+    color: var(--accent-blue);
+    border: 1px dashed var(--accent-blue);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 10px;
+  }
+  
+  .btn-generate {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .btn-generate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* AI Report (Markdown Styling) */
+  .ai-report {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    line-height: 1.6;
+  }
+  
+  .ai-report h2 {
+    color: var(--accent-blue);
+    border-bottom: 2px solid #f0f4f8;
+    padding-bottom: 10px;
+    margin-top: 1.5rem;
+  }
+  
+  .ai-report table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .ai-report th {
+    background: #f8fafc;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  
+  .ai-report td {
+    padding: 12px;
+    border-bottom: 1px solid #edf2f7;
+  }
+  
+  .ai-report blockquote {
+    border-left: 4px solid var(--accent-blue);
+    padding: 10px 20px;
+    background: #f0f7ff;
+    margin: 20px 0;
+  }
