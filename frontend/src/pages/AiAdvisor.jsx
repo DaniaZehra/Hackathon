@@ -113,7 +113,7 @@ function AiAdvisor({
         />
 
         <main className="dashboard-main">
-          <section className="section advisor-section advisor-container" style={{ maxWidth: 900 }}>
+          <section className="section advisor-section advisor-container" style={{ maxWidth: '1400px', width: '100%', margin: '0 auto' }}>
             <h2 className="section-title-editProfile">AI Advisors Dashboard</h2>
 
             <div className="advisor-grid">
@@ -133,7 +133,7 @@ function AiAdvisor({
                       />
                       <input
                         type="number"
-                        placeholder="Value ($)"
+                        placeholder="Value (PKR)"
                         value={h.value}
                         onChange={(e) => updateHolding(i, 'value', e.target.value)}
                       />
@@ -147,12 +147,14 @@ function AiAdvisor({
                       </select>
                     </div>
                   ))}
-                  <button onClick={addHolding} className="btn-add" style={{ marginRight: '10px' }}>
-                    + Add Stock
-                  </button>
-                  <button onClick={getAiAnalysis} disabled={loading} className="btn-generate">
-                    {loading ? 'Agent is analyzing...' : 'Generate AI Report'}
-                  </button>
+                  <div className="advisor-buttons-row">
+                    <button onClick={addHolding} className="btn-add">
+                      + Add Stock
+                    </button>
+                    <button onClick={getAiAnalysis} disabled={loading} className="btn-generate">
+                      {loading ? 'Agent is analyzing...' : 'Generate AI Report'}
+                    </button>
+                  </div>
                 </div>
 
                 {/* FINANCIAL ADVISOR INPUTS */}
@@ -185,10 +187,15 @@ function AiAdvisor({
               {/* RIGHT COLUMN: OUTPUTS */}
               <div className="advisor-column">
                 {/* WEALTH ANALYSIS OUTPUT */}
-                {report && (
+                {report ? (
                   <div className="ai-report">
                     <h3 className="ai-report-title">AI Wealth Advisor Report</h3>
                     <ReactMarkdown>{report}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <div className="advisor-empty-state">
+                    <p>AI Wealth Advisor Report</p>
+                    <span>Add holdings and click Generate AI Report to see your analysis here.</span>
                   </div>
                 )}
 
