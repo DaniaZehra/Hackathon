@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from agent_wealth.agent import WealthManagementAgent
 import io
 import os
 
@@ -92,6 +93,22 @@ def create_test_user():
     except Exception as e:
         return {"error": f"Failed to create user: {str(e)}"}
 
+@app.post("/analyze", response_model=AnalysisResponse)
+async def analyze_portfolio(request: PortfolioRequest):
+    
+    try:
+        portfolio_data = [holding.model_dump() for holding in request.holdings]
+        
+      
+        result = agent_system.run(portfolio_data)
+        
+        return AnalysisResponse(
+            status="success",
+            report=str(result)
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Agent Execution Error: {str(e)}")
     
 @app.get("/user/{username}")
 def get_user(username: str):
