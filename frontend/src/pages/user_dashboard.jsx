@@ -6,6 +6,19 @@ import Sidebar from '../components/Sidebar.jsx'
 import DashboardTopbar from '../components/DashboardTopbar.jsx'
 import { sendMoney, addFunds, payBill } from '../api/auth.js'
 
+function getTimeBasedGreeting() {
+  const hour = new Date().getHours()
+  if (hour >= 5 && hour < 12) {
+    return 'Good Morning'
+  } else if (hour >= 12 && hour < 17) {
+    return 'Good Afternoon'
+  } else if (hour >= 17 && hour < 21) {
+    return 'Good Evening'
+  } else {
+    return 'Good Night'
+  }
+}
+
 function UserDashboard({
   user,
   onLogout,
@@ -15,7 +28,8 @@ function UserDashboard({
   onGoToTransactions,
   onUserUpdate,
 }) {
-  const displayName = user?.firstname || 'Hira'
+  const displayName = user?.firstname || 'User'
+  const greeting = getTimeBasedGreeting()
   const balance = user?.balance ?? 0
   const monthlySpends = user?.monthly_spends ?? 0
   const dailyAvgSpend = user?.daily_avg_spend ?? 0
@@ -72,7 +86,7 @@ function UserDashboard({
 
           {/* Main content */}
           <main className="dashboard-main">
-          <h2 className="balance-title">Good Afternoon, {displayName}</h2>
+          <h2 className="balance-title">{greeting}, {displayName}</h2>
             {/* Balance hero card */}
             <section className="balance-hero-card">
               <div className="balance-hero-bg" />
