@@ -1,38 +1,120 @@
+import { useState } from 'react'
 import './App.css'
+import Landing from './pages/Landing.jsx'
+import Login from './pages/auth/Login.jsx'
+import Signup from './pages/auth/Signup.jsx'
+import UserDashboard from './pages/user_dashboard.jsx'
+import EditProfile from './pages/editProfile.jsx'
+import VoiceAssistant from './pages/VoiceAssistant.jsx'
+import AiAdvisor from './pages/AiAdvisor.jsx'
+import Transactions from './pages/Transactions.jsx'
 
 function App() {
-  return (
-    <div className="landing">
-      <header className="header">
-        <img className="header-logo" src="/logo.png" alt="SecureSpend" />
-        <nav className="nav">
-          <a href="#Menu">Menu</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#cta" className="btn btn-outline">Get started</a>
-        </nav>
-      </header>
+  const [screen, setScreen] = useState('landing') // 'landing' | 'login' | 'signup' | 'user_dashboard' | 'edit_profile' | 'voice_assistant' | 'ai_advisor' | 'transactions'
+  const [currentUser, setCurrentUser] = useState(null)
 
-      <section className="hero">
-        <div className="hero-bg" />
-      </section>
+  const showLanding = () => {
+    setCurrentUser(null)
+    setScreen('landing')
+  }
+  const showLogin = () => setScreen('login')
+  const showSignup = () => setScreen('signup')
+  const showDashboard = (user) => {
+    setCurrentUser(user)
+    setScreen('user_dashboard')
+  }
+  const handleUserUpdate = (user) => {
+    setCurrentUser(user)
+  }
+  const showProfile = () => setScreen('edit_profile')
+  const showVoiceAssistant = () => setScreen('voice_assistant')
+  const showAiAdvisor = () => setScreen('ai_advisor')
+  const showTransactions = () => setScreen('transactions')
+  const handleLogout = () => {
+    setCurrentUser(null)
+    setScreen('landing')
+  }
 
-      <footer className="footer">
-        <div className="footer-top" />
-        <div className="footer-inner">
-          <div className="footer-brand">
-            <img className="footer-logo" src="/logo.png" alt="SecureSpend" />
-            <p className="footer-tagline">Spend smarter.</p>
-          </div>
-          <div className="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
-          </div>
-          <p className="footer-copy">© {new Date().getFullYear()} SecureSpend</p>
-        </div>
-      </footer>
-    </div>
-  )
+  if (screen === 'login') {
+    return (
+      <Login
+        onGoToSignup={showSignup}
+        onGoHome={showLanding}
+        onLoginSuccess={showDashboard}
+      />
+    )
+  }
+
+  if (screen === 'signup') {
+    return <Signup onGoToLogin={showLogin} onGoHome={showLanding} />
+  }
+
+  if (screen === 'user_dashboard') {
+    return (
+      <UserDashboard
+        user={currentUser}
+        onLogout={handleLogout}
+        onGoToProfile={showProfile}
+        onGoToVoiceAssistant={showVoiceAssistant}
+        onGoToAiAdvisor={showAiAdvisor}
+        onGoToTransactions={showTransactions}
+        onUserUpdate={handleUserUpdate}
+      />
+    )
+  }
+
+  if (screen === 'edit_profile') {
+    return (
+      <EditProfile
+        user={currentUser}
+        onBack={showDashboard}
+        onGoToVoiceAssistant={showVoiceAssistant}
+        onGoToAiAdvisor={showAiAdvisor}
+        onGoToTransactions={showTransactions}
+      />
+    )
+  }
+
+  if (screen === 'voice_assistant') {
+    return (
+      <VoiceAssistant
+        user={currentUser}
+        onGoToDashboard={() => showDashboard(currentUser)}
+        onGoToVoiceAssistant={showVoiceAssistant}
+        onGoToAiAdvisor={showAiAdvisor}
+        onGoToTransactions={showTransactions}
+        onGoToProfile={showProfile}
+      />
+    )
+  }
+
+  if (screen === 'ai_advisor') {
+    return (
+      <AiAdvisor
+        user={currentUser}
+        onGoToDashboard={() => showDashboard(currentUser)}
+        onGoToVoiceAssistant={showVoiceAssistant}
+        onGoToAiAdvisor={showAiAdvisor}
+        onGoToTransactions={showTransactions}
+        onGoToProfile={showProfile}
+      />
+    )
+  }
+
+  if (screen === 'transactions') {
+    return (
+      <Transactions
+        user={currentUser}
+        onGoToDashboard={() => showDashboard(currentUser)}
+        onGoToVoiceAssistant={showVoiceAssistant}
+        onGoToAiAdvisor={showAiAdvisor}
+        onGoToTransactions={showTransactions}
+        onGoToProfile={showProfile}
+      />
+    )
+  }
+
+  return <Landing onGetStarted={showSignup} onLoginClick={showLogin} />
 }
 
 export default App
