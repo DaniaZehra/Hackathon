@@ -81,6 +81,27 @@
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
     line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* Custom scrollbar for report */
+  .ai-report::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .ai-report::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+  }
+
+  .ai-report::-webkit-scrollbar-thumb {
+    background: #cbd5f5;
+    border-radius: 999px;
+  }
+
+  .ai-report::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
   }
   
   .ai-report h2 {
@@ -93,19 +114,43 @@
   .ai-report table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 24px 0;
+    background: #f9fafb;
+    border-radius: 10px;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .ai-report thead {
+    background: #0f172a;
+    color: #f9fafb;
+  }
+  
+  .ai-report th,
+  .ai-report td {
+    font-size: 0.9rem;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
   }
   
   .ai-report th {
-    background: #f8fafc;
+    font-weight: 600;
     text-align: left;
-    padding: 12px;
-    border-bottom: 2px solid #e2e8f0;
   }
   
-  .ai-report td {
-    padding: 12px;
-    border-bottom: 1px solid #edf2f7;
+  .ai-report tbody tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  
+  .ai-report tbody tr:hover td {
+    background: #e0f2fe;
+  }
+  
+  /* Right-align numeric columns (value / allocation) */
+  .ai-report td:nth-child(3),
+  .ai-report td:nth-child(4) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
   }
   
   .ai-report blockquote {

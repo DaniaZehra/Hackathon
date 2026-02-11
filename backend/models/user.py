@@ -22,6 +22,7 @@ class User(Document):
     monthly_spends = FloatField(default=0.0)
     daily_avg_spend = FloatField(default=0.0)
     transaction_history = ListField(DictField())  
+    agent_history = ListField(DictField())
 
     meta = {"collection": "users"}
 

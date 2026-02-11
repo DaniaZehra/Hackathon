@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {"message": "Voice Banking API Running ✅"}
+    return {"message": "Banking Application running ✅"}
 
 
 class SignupRequest(BaseModel):
@@ -189,7 +189,8 @@ def create_test_user():
             balance=25000,
             monthly_spends=12000,
             daily_avg_spend=400,
-            transaction_history=[]
+            transaction_history=[],
+            agent_history=[]
         )
         user.save()
         
