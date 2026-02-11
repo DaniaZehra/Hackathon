@@ -159,3 +159,109 @@
     background: #f0f7ff;
     margin: 20px 0;
   }
+
+/* Shared advisor layout for both panels */
+.advisor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.25fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.advisor-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ai-report-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--primary-dark);
+}
+
+/* Financial advisor input card uses same card styling */
+.advisor-input-card {
+  background: white;
+  padding: 20px 24px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid #edf2f7;
+}
+
+.advisor-helper-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.advisor-input-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.advisor-input-row input,
+.advisor-input-row select {
+  padding: 10px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.advisor-input-row input:focus,
+.advisor-input-row select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.advisor-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.advisor-actions h4 {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.advisor-actions ul {
+  margin-top: 6px;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.advisor-history {
+  margin-top: 14px;
+  font-size: 0.9rem;
+}
+
+.advisor-history summary {
+  cursor: pointer;
+  color: var(--accent-blue);
+}
+
+.advisor-history-list {
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.advisor-history-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.86rem;
+  color: #4b5563;
+}
+
+@media (max-width: 900px) {
+  .advisor-grid {
+    grid-template-columns: 1fr;
+  }
+}

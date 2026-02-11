@@ -1,11 +1,21 @@
 # main.py
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from agent.agent import run_financial_agent
 from voice.tts import text_to_speech  # optional
 from models.users import User
 
 app = FastAPI(title="AdvisorFin API")
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/financial-advisor")

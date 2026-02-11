@@ -7,7 +7,7 @@ from models.financial_report import Holding, PortfolioRequest, AnalysisResponse
 import io
 import os
 from datetime import datetime
-
+#from ..backend_advisor.agent.agent import run_financial_agent
 import bcrypt
 from pydantic import BaseModel
 
@@ -207,6 +207,21 @@ def create_test_user():
             
     except Exception as e:
         return {"error": f"Failed to create user: {str(e)}"}
+
+
+# @app.post("/financial-advisor")
+# def financial_advisor(user_id: str, language: str = "en"):
+#     user = User.objects(id=user_id).first()
+#     if not user:
+#         return {"error": "User not found"}
+
+#     text, actions, past = run_financial_agent(user_id, language)
+
+#     return {
+#         "text_response": text,
+#         "actions_taken": actions,
+#         "past_history": past
+#     }
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_portfolio(request: PortfolioRequest):
