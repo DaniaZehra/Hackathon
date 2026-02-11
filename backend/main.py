@@ -3,6 +3,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from agent_wealth.agent import WealthManagementAgent
+from models.financial_report import Holding, PortfolioRequest, AnalysisResponse
 import io
 import os
 from datetime import datetime
@@ -213,7 +214,7 @@ async def analyze_portfolio(request: PortfolioRequest):
         portfolio_data = [holding.model_dump() for holding in request.holdings]
         
       
-        result = agent_system.run(portfolio_data)
+        result = WealthManagementAgent().run(portfolio_data)
         
         return AnalysisResponse(
             status="success",
