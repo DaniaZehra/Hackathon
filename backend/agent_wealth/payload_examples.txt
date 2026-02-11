@@ -1,0 +1,69 @@
+{
+  "holdings": [
+    {
+      "ticker": "AAPL",
+      "value": 50000,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "MSFT",
+      "value": 30000,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "JNJ",
+      "value": 20000,
+      "sector": "Healthcare"
+    }
+  ]
+}
+
+{
+  "holdings": [
+    {
+      "ticker": "JNJ",
+      "value": 40000.0,
+      "sector": "Healthcare"
+    },
+    {
+      "ticker": "PG",
+      "value": 35000.0,
+      "sector": "Consumer Defensive"
+    },
+    {
+      "ticker": "KO",
+      "value": 30000.0,
+      "sector": "Consumer Defensive"
+    },
+    {
+      "ticker": "PFE",
+      "value": 25000.0,
+      "sector": "Healthcare"
+    },
+    {
+      "ticker": "XOM",
+      "value": 20000.0,
+      "sector": "Energy"
+    }
+  ]
+}
+
+{
+  "holdings": [
+    {
+      "ticker": "TSLA",
+      "value": 140000.0,
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "ticker": "NVIDIA",
+      "value": 40000.0,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "BABA",
+      "value": 20000.0,
+      "sector": "Technology"
+    }
+  ]
+}
