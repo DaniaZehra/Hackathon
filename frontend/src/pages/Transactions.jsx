@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import '../App.css'
 import './user_dashboard.css'
 import Sidebar from '../components/Sidebar.jsx'
+import DashboardTopbar from '../components/DashboardTopbar.jsx'
 
 const BILL_CATEGORIES = ['electricity', 'gas', 'water', 'internet', 'mobile']
 
@@ -65,6 +66,7 @@ function Transactions({
   onGoToAiAdvisor,
   onGoToTransactions,
   onGoToProfile,
+  onLogout,
 }) {
   const rawTransactions = user?.transaction_history || []
 
@@ -122,9 +124,7 @@ function Transactions({
 
   return (
     <div className="landing">
-      <header className="header">
-        <img className="header-logo" src="/logo.png" alt="SecureSpend" />
-      </header>
+      <DashboardTopbar onGoToProfile={onGoToProfile} onLogout={onLogout} />
 
       <div className="dashboard-layout">
         <Sidebar

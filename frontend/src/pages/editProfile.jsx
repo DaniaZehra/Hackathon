@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import '../App.css'
+import './user_dashboard.css'
 import { updateUserProfile } from '../api/auth.js'
 import Sidebar from '../components/Sidebar.jsx'
+import DashboardTopbar from '../components/DashboardTopbar.jsx'
 
 function EditProfile({
   user,
@@ -9,6 +11,8 @@ function EditProfile({
   onGoToVoiceAssistant,
   onGoToAiAdvisor,
   onGoToTransactions,
+   onGoToProfile,
+   onLogout,
 }) {
   const [firstname, setFirstname] = useState(user?.firstname || '')
   const [lastname, setLastname] = useState(user?.lastname || '')
@@ -58,9 +62,10 @@ function EditProfile({
 
   return (
     <div className="landing">
-      <header className="header">
-        <img className="header-logo" src="/logo.png" alt="SecureSpend" />
-      </header>
+      <DashboardTopbar
+        onGoToProfile={onGoToProfile || (() => onBack && onBack(user))}
+        onLogout={onLogout}
+      />
 
       <div className="dashboard-layout">
         {/* Sidebar (same style as dashboard) */}

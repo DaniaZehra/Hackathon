@@ -2,7 +2,9 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown' 
 import '../App.css'
 import './AiAdvisor.css'
+import './user_dashboard.css'
 import Sidebar from '../components/Sidebar.jsx'
+import DashboardTopbar from '../components/DashboardTopbar.jsx'
 
 function AiAdvisor({
   onGoToDashboard,
@@ -10,6 +12,7 @@ function AiAdvisor({
   onGoToAiAdvisor,
   onGoToTransactions,
   onGoToProfile,
+  onLogout,
 }) {
   // 1. State for Portfolio Inputs & API Response
   const [holdings, setHoldings] = useState([{ ticker: '', value: '', sector: 'Technology' }])
@@ -48,9 +51,7 @@ function AiAdvisor({
 
   return (
     <div className="landing">
-      <header className="header">
-        <img className="header-logo" src="/logo.png" alt="SecureSpend" />
-      </header>
+      <DashboardTopbar onGoToProfile={onGoToProfile} onLogout={onLogout} />
 
       <div className="dashboard-layout">
         <Sidebar
