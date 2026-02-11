@@ -68,6 +68,8 @@ function App() {
       <EditProfile
         user={currentUser}
         onBack={showDashboard}
+        onGoToProfile={showProfile}
+        onLogout={handleLogout}
         onGoToVoiceAssistant={showVoiceAssistant}
         onGoToAiAdvisor={showAiAdvisor}
         onGoToTransactions={showTransactions}
@@ -84,6 +86,7 @@ function App() {
         onGoToAiAdvisor={showAiAdvisor}
         onGoToTransactions={showTransactions}
         onGoToProfile={showProfile}
+        onLogout={handleLogout}
       />
     )
   }
@@ -97,6 +100,7 @@ function App() {
         onGoToAiAdvisor={showAiAdvisor}
         onGoToTransactions={showTransactions}
         onGoToProfile={showProfile}
+        onLogout={handleLogout}
       />
     )
   }
@@ -110,6 +114,7 @@ function App() {
         onGoToAiAdvisor={showAiAdvisor}
         onGoToTransactions={showTransactions}
         onGoToProfile={showProfile}
+        onLogout={handleLogout}
       />
     )
   }

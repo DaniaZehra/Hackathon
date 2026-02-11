@@ -1,9 +1,23 @@
 import { useState } from 'react'
 import './user_dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMoneyBillWave, faSearch, faBell, faGear, faWallet, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faMoneyBillWave, faWallet, faPlus } from '@fortawesome/free-solid-svg-icons'
 import Sidebar from '../components/Sidebar.jsx'
+import DashboardTopbar from '../components/DashboardTopbar.jsx'
 import { sendMoney, addFunds, payBill } from '../api/auth.js'
+
+function getTimeBasedGreeting() {
+  const hour = new Date().getHours()
+  if (hour >= 5 && hour < 12) {
+    return 'Good Morning'
+  } else if (hour >= 12 && hour < 17) {
+    return 'Good Afternoon'
+  } else if (hour >= 17 && hour < 21) {
+    return 'Good Evening'
+  } else {
+    return 'Good Night'
+  }
+}
 
 function UserDashboard({
   user,
@@ -14,12 +28,12 @@ function UserDashboard({
   onGoToTransactions,
   onUserUpdate,
 }) {
-  const displayName = user?.firstname || 'Hira'
+  const displayName = user?.firstname || 'User'
+  const greeting = getTimeBasedGreeting()
   const balance = user?.balance ?? 0
   const monthlySpends = user?.monthly_spends ?? 0
   const dailyAvgSpend = user?.daily_avg_spend ?? 0
   const transactions = user?.transaction_history || []
-  const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
   const [isSendModalOpen, setIsSendModalOpen] = useState(false)
   const [recipientName, setRecipientName] = useState('')
   const [accountId, setAccountId] = useState('')
@@ -58,59 +72,7 @@ function UserDashboard({
 
       <div className="dashboard-shell">
         {/* Top bar */}
-        <header className="dashboard-topbar">
-          <div className="dashboard-topbar-left">
-            <div className="dashboard-logo-wrap">
-              <img src="/logo.png" alt="SecureSpend" className="dashboard-logo" />
-            </div>
-            <div className="dashboard-search">
-              <span className="dashboard-search-icon"><FontAwesomeIcon icon={faSearch} /></span>
-              <input
-                className="dashboard-search-input"
-                placeholder="Search"
-              />
-            </div>
-          </div>
-
-          <div className="dashboard-topbar-right">
-            <button className="icon-button" aria-label="Notifications">
-              <FontAwesomeIcon icon={faBell} />
-            </button>
-            <button className="icon-button" aria-label="Settings">
-              <FontAwesomeIcon icon={faGear} />
-            </button>
-            <div className="avatar-wrapper">
-              <button
-                type="button"
-                className="dashboard-avatar"
-                onClick={() => setIsAvatarMenuOpen((open) => !open)}
-              >
-                <img src="/Profile_pic.png" alt="Avatar" />
-              </button>
-              {isAvatarMenuOpen && (
-                <div className="avatar-menu">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAvatarMenuOpen(false)
-                      if (onGoToProfile) onGoToProfile()
-                    }}
-                  >
-                    User profile
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onLogout) onLogout()
-                    }}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </header>
+        <DashboardTopbar onGoToProfile={onGoToProfile} onLogout={onLogout} />
 
         <div className="dashboard-layout">
           {/* Sidebar */}
@@ -124,7 +86,7 @@ function UserDashboard({
 
           {/* Main content */}
           <main className="dashboard-main">
-          <h2 className="balance-title">Good Afternoon, {displayName}</h2>
+          <h2 className="balance-title">{greeting}, {displayName}</h2>
             {/* Balance hero card */}
             <section className="balance-hero-card">
               <div className="balance-hero-bg" />

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import '../App.css'
 import './user_dashboard.css'
 import Sidebar from '../components/Sidebar.jsx'
+import DashboardTopbar from '../components/DashboardTopbar.jsx'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
@@ -12,6 +13,7 @@ function VoiceAssistant({
   onGoToAiAdvisor,
   onGoToTransactions,
   onGoToProfile,
+  onLogout,
 }) {
   const [isRecording, setIsRecording] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -121,9 +123,7 @@ function VoiceAssistant({
 
   return (
     <div className="landing">
-      <header className="header">
-        <img className="header-logo" src="/logo.png" alt="SecureSpend" />
-      </header>
+      <DashboardTopbar onGoToProfile={onGoToProfile} onLogout={onLogout} />
 
       <div className="dashboard-layout">
         {/* Sidebar (same as dashboard) */}
