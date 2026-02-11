@@ -31,7 +31,7 @@ function Login({ onGoToSignup, onGoHome, onLoginSuccess }) {
             setLoading(true)
             try {
               const result = await loginUser({ username, password })
-              console.log('Logged in user', result.user)
+              document.cookie = `user_id=${result.user.id}; path=/; SameSite=Lax`
               if (onLoginSuccess) {
                 onLoginSuccess(result.user)
               }

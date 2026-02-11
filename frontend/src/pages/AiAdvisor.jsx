@@ -63,14 +63,14 @@ function AiAdvisor({
         />
 
         <main className="dashboard-main">
-          <section className="section advisor-section" style={{ maxWidth: 900 }}>
+          <section className="section advisor-section advisor-container" style={{ maxWidth: 900 }}>
             <h2 className="section-title-editProfile">AI Wealth Advisor</h2>
             
             {/* INPUT SECTION */}
-            <div className="portfolio-inputs" style={{ background: '#f9f9f9', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
+            <div className="portfolio-card">
               <h3>Enter Your Holdings</h3>
               {holdings.map((h, i) => (
-                <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                <div key={i} className="holding-row">
                   <input placeholder="Ticker (e.g. AAPL)" value={h.ticker} onChange={(e) => updateHolding(i, 'ticker', e.target.value.toUpperCase())} />
                   <input type="number" placeholder="Value ($)" value={h.value} onChange={(e) => updateHolding(i, 'value', e.target.value)} />
                   <select value={h.sector} onChange={(e) => updateHolding(i, 'sector', e.target.value)}>
@@ -80,15 +80,15 @@ function AiAdvisor({
                   </select>
                 </div>
               ))}
-              <button onClick={addHolding} style={{ marginRight: '10px' }}>+ Add Stock</button>
-              <button onClick={getAiAnalysis} disabled={loading} style={{ background: '#2f3131', color: 'white' }}>
+              <button onClick={addHolding} className="btn-add" style={{ marginRight: '10px' }}>+ Add Stock</button>
+              <button onClick={getAiAnalysis} disabled={loading} className="btn-generate">
                 {loading ? "Agent is analyzing..." : "Generate AI Report"}
               </button>
             </div>
 
             {/* OUTPUT SECTION */}
             {report && (
-              <div className="ai-report-container" style={{ background: 'white', padding: '30px', borderRadius: '12px', border: '1px solid #ddd', color: '#2f3131' }}>
+              <div className="ai-report">
                 <ReactMarkdown>{report}</ReactMarkdown>
               </div>
             )}
